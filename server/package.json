@@ -4,6 +4,14 @@
   "main": "index.js",
   "author": "Bishal Neupane",
   "license": "MIT",
+  "scripts": {
+    "watch": "tsc -w",
+    "dev": "tsnd --respawn src/index.ts",
+    "start": "tsc && node dist/index.js",
+    "start2": "ts-node src/index.ts",
+    "build": "tsc",
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^3.3.0",
     "apollo-server-express": "^3.4.0",
@@ -24,5 +32,8 @@
     "ts-node": "^10.3.1",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.4"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
