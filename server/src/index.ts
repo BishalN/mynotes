@@ -1,29 +1,29 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import dotenv from 'dotenv';
 import passport from 'passport';
+import cookieParser from 'cookie-parser';
+import { json } from 'body-parser';
 
 import { context, prismaClient } from './context';
 import { helloResolver } from './helloResolver';
 import { router as googleAuthHandler } from './modules/auth/google';
 import { router as facebookAuthHandler } from './modules/auth/facebook';
 import { router as githubAuthHandler } from './modules/auth/github';
+import { router as localAuthHandler } from './modules/auth/local';
 import { User } from './modules/user/User';
+import { ErrorHandler, errorHandler } from './modules/middleware/errorHandler';
 
 dotenv.config();
 
 const main = async () => {
   const app = express();
 
-  const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [helloResolver],
-    }),
-    context,
-    introspection: true,
-  });
+  app.use(cookieParser());
+  app.use(json());
+  app.use(passport.initialize());
 
   passport.serializeUser(function (user: User, done) {
     done(null, user.id);
@@ -38,23 +38,39 @@ const main = async () => {
     }
   });
 
-  app.use(passport.initialize());
-
   app.use('/auth/google', googleAuthHandler);
   app.use('/auth/facebook', facebookAuthHandler);
   app.use('/auth/github', githubAuthHandler);
+  app.use('/auth/local', localAuthHandler);
+
+  app.post('/', async (req, res) => {
+    console.log(req.body);
+    res.send('suck');
+  });
 
   app.get('/success', (req, res) => {
-    // res.send('Successfully done');
     console.log(req.user);
     res.send('success');
   });
 
-  await apolloServer.start();
+  app.use(
+    (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
+      errorHandler(err, res);
+    }
+  );
 
-  apolloServer.applyMiddleware({
-    app,
-  });
+  // const apolloServer = new ApolloServer({
+  //   schema: await buildSchema({
+  //     resolvers: [helloResolver],
+  //   }),
+  //   context,
+  // });
+
+  // await apolloServer.start();
+
+  // apolloServer.applyMiddleware({
+  //   app,
+  // });
 
   app.listen(process.env.PORT || 4000, () => {
     console.log('timeXoneSyncer running on port 4000 !!');

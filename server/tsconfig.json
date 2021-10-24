@@ -9,8 +9,7 @@
     "rootDir": "src",
 
     "removeComments": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
