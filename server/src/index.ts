@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import { json } from 'body-parser';
+import cookieSession from 'cookie-session';
+import cors from 'cors';
 
 import { context, prismaClient } from './context';
 import { helloResolver } from './helloResolver';
@@ -20,9 +22,23 @@ dotenv.config();
 const main = async () => {
   const app = express();
 
+  app.use(cors());
+
+  app.set('trust proxy', 1);
+
+  app.use(
+    cookieSession({
+      secret: 'hellowo',
+      name: 'qid',
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    })
+  );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use(cookieParser());
   app.use(json());
-  app.use(passport.initialize());
 
   passport.serializeUser(function (user: User, done) {
     done(null, user.id);

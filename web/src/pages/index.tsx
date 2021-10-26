@@ -1,11 +1,68 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import useLogin, { LoginError } from '../hooks/mutation/useLogin';
+
+export type OnChangeEvent = React.ChangeEvent<HTMLInputElement>;
+export type InputError = { field: string; message: string };
+export type InputErrors = InputError[];
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const { mutate, isLoading, data } = useLogin();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<InputErrors>([]);
+
+  const loginHandler = () => {
+    setErrors([]);
+    if (!email || !email.includes('@')) {
+      setErrors((prevError) => [
+        ...prevError,
+        { field: 'email', message: 'Email is required and must be valid' },
+      ]);
+      return;
+    }
+    if (!password || password.length < 6) {
+      setErrors((prevError) => [
+        ...prevError,
+        {
+          field: 'password',
+          message: 'Password is required and must be atleas 6 character long',
+        },
+      ]);
+      return;
+    }
+    mutate(
+      { email, password },
+      {
+        onError: (errors) => {
+          //Check if the data is array or an object
+          if (errors.response?.data?.hasOwnProperty('length')) {
+            const errs: LoginError[] = errors?.response?.data;
+            errs.map((err) => {
+              setErrors((prevError) => [
+                ...prevError,
+                { field: err.field, message: err.message },
+              ]);
+            });
+          } else {
+            const err: LoginError = errors.response.data;
+            console.log(err);
+            setErrors((prevError) => [
+              ...prevError,
+              { field: err.field, message: err.message },
+            ]);
+          }
+        },
+      }
+    );
+  };
+
   return (
     <div>
       <Head>
@@ -45,12 +102,37 @@ const Home: NextPage = () => {
 
               <form
                 action=''
-                className='flex flex-col w-full space-y-4 text-center'
+                className='flex flex-col w-full space-y-2 text-center'
               >
-                <Input placeholder='Enter your email address' />
-                <Input isPassword placeholder='Enter your password' />
+                <Input
+                  placeholder='Enter your email address'
+                  value={email}
+                  onChange={(e: OnChangeEvent) => setEmail(e.target.value)}
+                />
+                {errors.map(
+                  (err) =>
+                    err.field == 'email' && (
+                      <span className='text-red-600 text-xs '>
+                        {err.message}
+                      </span>
+                    )
+                )}
+                <Input
+                  isPassword
+                  placeholder='Enter your password'
+                  onChange={(e: OnChangeEvent) => setPassword(e.target.value)}
+                />
+                {errors.map(
+                  (err) =>
+                    err.field == 'password' && (
+                      <span className='text-red-600 text-xs '>
+                        {err.message}
+                      </span>
+                    )
+                )}
                 <button
                   type='button'
+                  onClick={loginHandler}
                   className='bg-gray-300 w-52 hover:bg-gray-400
                  focus:ring-2 focus:ring-gray-800 self-center rounded-md p-2 '
                 >
@@ -64,9 +146,27 @@ const Home: NextPage = () => {
                 </span>
                 <div className='border-b-2 w-64 self-center border-black'></div>
               </form>
-              <Button>Continue with facebook</Button>
-              <Button>Continue with google</Button>
-              <Button>Continue with github</Button>
+              <Button
+                onClick={() => {
+                  router.push('http://localhost:4000/auth/facebook');
+                }}
+              >
+                Continue with facebook
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push('http://localhost:4000/auth/google');
+                }}
+              >
+                Continue with google
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push('http://localhost:4000/auth/github');
+                }}
+              >
+                Continue with github
+              </Button>
             </div>
           </section>
         </main>

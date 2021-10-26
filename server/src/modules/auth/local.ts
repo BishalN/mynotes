@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { validationResult, body, query, param } from 'express-validator';
-import passport from 'passport';
+import passport, { serializeUser } from 'passport';
 import {
   Strategy as JwtStrategy,
   ExtractJwt,
@@ -14,6 +14,7 @@ import {
   sendForgotPasswordEmail,
   sendVerifyEmail,
 } from '../../utils/sendEmail';
+import { serializeError } from '../../utils/serializeError';
 
 const router = express.Router();
 
@@ -58,7 +59,7 @@ router.post(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send(errors.array());
+      return res.status(400).send(serializeError(errors.array()));
     }
     const { email, password } = req.body;
 
@@ -97,7 +98,7 @@ router.get(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send({ errors: errors.array() });
+      return res.status(400).send(serializeError(errors.array()));
     }
     const { token } = req.query;
 
@@ -110,7 +111,10 @@ router.get(
       const user = await prismaClient.user.findUnique({
         where: { id: userId },
       });
-      if (!user) return res.status(404).send({ message: 'user not found' });
+      if (!user)
+        return res
+          .status(404)
+          .send({ field: 'token', message: 'user not found' });
 
       await prismaClient.user.update({
         where: { id: userId },
@@ -139,7 +143,7 @@ router.post(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send({ errors: errors.array() });
+      return res.status(400).send(serializeError(errors.array()));
     }
 
     const { email, password } = req.body;
@@ -177,7 +181,7 @@ router.get(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send({ errors: errors.array() });
+      return res.status(400).send(serializeError(errors.array()));
     }
 
     const { email } = req.params;
@@ -208,7 +212,7 @@ router.post(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send({ errors: errors.array() });
+      return res.status(400).send(serializeError(errors.array()));
     }
 
     const { token, password } = req.body;

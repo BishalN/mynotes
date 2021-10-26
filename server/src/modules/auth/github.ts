@@ -50,7 +50,9 @@ passport.use(
 
 router.get(
   '/',
-  passport.authenticate('github', { scope: ['profile', 'email', 'openid'] })
+  passport.authenticate('github', {
+    scope: ['profile', 'email', 'openid'],
+  })
 );
 
 router.get(
@@ -59,8 +61,7 @@ router.get(
     failureRedirect: process.env.LOGIN_URL,
   }),
   (req, res) => {
-    // res.redirect(process.env.LOGIN_SUCCESS_URL);
-    res.redirect('/success');
+    res.redirect(process.env.LOGIN_SUCCESS_URL);
   }
 );
 export { router };

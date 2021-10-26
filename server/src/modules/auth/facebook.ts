@@ -70,8 +70,8 @@ router.get(
     failureRedirect: process.env.LOGIN_URL,
   }),
   (req, res) => {
-    // res.redirect(process.env.LOGIN_SUCCESS_URL);
-    res.redirect('/success');
+    //set the cookie to the browser with some token
+    res.redirect(process.env.LOGIN_SUCCESS_URL);
   }
 );
 export { router };
