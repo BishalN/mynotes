@@ -14,7 +14,6 @@ import { router as facebookAuthHandler } from './modules/auth/facebook';
 import { router as githubAuthHandler } from './modules/auth/github';
 import { router as localAuthHandler } from './modules/auth/local';
 import { User } from './modules/user/User';
-import { ErrorHandler, errorHandler } from './modules/middleware/errorHandler';
 
 dotenv.config();
 
@@ -53,24 +52,18 @@ const main = async () => {
     res.send('success');
   });
 
-  app.use(
-    (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
-      errorHandler(err, res);
-    }
-  );
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [helloResolver],
+    }),
+    context,
+  });
 
-  // const apolloServer = new ApolloServer({
-  //   schema: await buildSchema({
-  //     resolvers: [helloResolver],
-  //   }),
-  //   context,
-  // });
+  await apolloServer.start();
 
-  // await apolloServer.start();
-
-  // apolloServer.applyMiddleware({
-  //   app,
-  // });
+  apolloServer.applyMiddleware({
+    app,
+  });
 
   app.listen(process.env.PORT || 4000, () => {
     console.log('timeXoneSyncer running on port 4000 !!');

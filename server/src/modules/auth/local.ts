@@ -76,10 +76,8 @@ router.post(
       data: { email, password: hashedPassword },
     });
 
-    //Eliminate password from user
     const { password: pass, ...userJson } = user;
 
-    //Now we need to send the email to the user to verify if the account is genuine
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
