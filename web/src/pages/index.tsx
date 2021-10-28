@@ -148,21 +148,27 @@ const Home: NextPage = () => {
               </form>
               <Button
                 onClick={() => {
-                  router.push('http://localhost:4000/auth/facebook');
+                  router.push(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/facebook`
+                  );
                 }}
               >
                 Continue with facebook
               </Button>
               <Button
                 onClick={() => {
-                  router.push('http://localhost:4000/auth/google');
+                  router.push(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`
+                  );
                 }}
               >
                 Continue with google
               </Button>
               <Button
                 onClick={() => {
-                  router.push('http://localhost:4000/auth/github');
+                  router.push(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/github`
+                  );
                 }}
               >
                 Continue with github

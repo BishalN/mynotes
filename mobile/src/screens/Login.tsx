@@ -1,13 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import {
-  Box,
-  Button,
-  Input,
-  ScrollView,
-  Text,
-  useToast,
-  VStack,
-} from 'native-base';
+import { Box, Button, Input, Text, useToast, VStack } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import useLogin from '../hooks/mutation/useLogin';
 import { LoginError } from '../hooks/mutation/useRegister';

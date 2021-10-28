@@ -14,7 +14,7 @@ export default function useRegister() {
         .post(
           `/auth/local`,
           { password, email },
-          { baseURL: 'http://localhost:4000' }
+          { baseURL: process.env.NEXT_PUBLIC_API_BASE_URL }
         )
         .then((res) => res.data),
     {
