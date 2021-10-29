@@ -24,6 +24,7 @@ export const useMeQuery = () => {
   return useQuery('me', async () => {
     const cookie = await AsyncStorage.getItem('cookie');
     const parsedCookie = JSON.parse(cookie as string);
+    console.log(parsedCookie);
 
     const { data } = await axios.get(`${BASE_URL}success`, {
       headers: {

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { validationResult, body, query, param } from 'express-validator';
-import passport, { serializeUser } from 'passport';
+import passport from 'passport';
 import {
   Strategy as JwtStrategy,
   ExtractJwt,
@@ -155,6 +155,11 @@ router.post(
       return res.status(400).send({
         field: 'email',
         message: `please login using ${user.provider}`,
+      });
+    } else if (!user.localEmailVerified) {
+      return res.status(400).send({
+        field: 'email',
+        message: `Please verify your email check your mail box we've sent a link to verify`,
       });
     }
 

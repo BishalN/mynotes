@@ -8,7 +8,7 @@ import { InputErrors } from '../utils/types';
 export const Register: React.FC = () => {
   const navigation = useNavigation();
   const toast = useToast();
-  const { mutate, isLoading } = useRegister();
+  const { mutate, isLoading, data } = useRegister();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<InputErrors>([]);

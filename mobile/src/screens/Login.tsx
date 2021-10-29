@@ -5,6 +5,7 @@ import useLogin from '../hooks/mutation/useLogin';
 import { LoginError } from '../hooks/mutation/useRegister';
 import { OauthButton } from '../components/OauthButton';
 import { InputErrors } from '../utils/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation();
@@ -66,8 +67,11 @@ export const Login: React.FC = () => {
             ]);
           }
         },
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
           console.log(data);
+          await AsyncStorage.setItem('token', data.token);
+          //@ts-ignore
+          navigation.navigate('Dash');
         },
       }
     );

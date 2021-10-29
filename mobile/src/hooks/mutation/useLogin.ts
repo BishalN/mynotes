@@ -8,12 +8,16 @@ export type LoginError = {
   message: string;
 };
 
+export type SuccessLoginType = {
+  token: string;
+};
+
 export default function useLogin() {
   return useMutation(
     ({ email, password }: LoginType) =>
       axios
         .post(`/auth/local/login`, { password, email }, { baseURL: BASE_URL })
-        .then((res) => res.data),
+        .then((res) => res.data as SuccessLoginType),
     {
       onMutate: (values) => {
         // console.log(values);
