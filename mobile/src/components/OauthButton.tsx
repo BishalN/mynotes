@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Text, useToast } from 'native-base';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
@@ -10,10 +10,7 @@ type OauthButtonProps = {
   provider: 'google' | 'facebook' | 'github';
 };
 
-export const OauthButton: React.FC<OauthButtonProps> = ({
-  provider,
-  children,
-}) => {
+export const OauthButton: React.FC<OauthButtonProps> = ({ provider }) => {
   const toast = useToast();
   const navigation = useNavigation();
   const handleAuthentication = async () => {

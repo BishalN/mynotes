@@ -74,7 +74,7 @@ router.post(
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prismaClient.user.create({
-      data: { email, password: hashedPassword },
+      data: { email, password: hashedPassword, provider: 'local' },
     });
 
     const { password: pass, ...userJson } = user;
@@ -148,11 +148,14 @@ router.post(
 
     const { email, password } = req.body;
 
-    //check if the user exist and compare the password
-    //if success then send back the token to login
     const user = await prismaClient.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(400).send({ field: 'emal', message: 'user not found' });
+    } else if (user.provider !== 'local') {
+      return res.status(400).send({
+        field: 'email',
+        message: `please login using ${user.provider}`,
+      });
     }
 
     const isCorrectPassword = await bcrypt.compare(password, user.password);
@@ -185,12 +188,16 @@ router.get(
     }
 
     const { email } = req.params;
-    //check to see if the user exists
     const user = await prismaClient.user.findUnique({ where: { email } });
     if (!user) {
       return res
         .status(404)
         .send({ field: 'email', message: 'user not found' });
+    } else if (user.provider !== 'local') {
+      return res.status(400).send({
+        field: 'email',
+        message: `this email is associated with ${user.provider} so we cannot change password`,
+      });
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
