@@ -30,7 +30,6 @@ const main = async () => {
     cookieSession({
       secret: 'hellowo',
       name: 'qid',
-      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     })
   );
@@ -65,7 +64,7 @@ const main = async () => {
 
   app.get('/success', (req, res) => {
     console.log(req.user);
-    res.send('success');
+    res.send(req.user);
   });
 
   const apolloServer = new ApolloServer({

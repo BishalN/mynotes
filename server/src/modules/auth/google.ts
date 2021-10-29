@@ -1,7 +1,8 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import express from 'express';
+import express, { Request } from 'express';
 import { prismaClient } from '../../context';
+import { isProd } from '../../utils/isProd';
 
 const router = express.Router();
 
@@ -10,10 +11,12 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      callbackURL: isProd
+        ? process.env.PROD_GOOGLE_CALLBACK_URL
+        : process.env.DEV_GOOGLE_CALLBACK_URL,
       scope: ['profile', 'email', 'openid'],
     },
-    async (req, res, profile, cb) => {
+    async (accessToken: string, refreshToken: string, profile, cb) => {
       const {
         _json: { email, name, picture, sub: id },
       } = profile;
@@ -40,18 +43,38 @@ passport.use(
   )
 );
 
+let redirectUrl: string;
+
 router.get(
   '/',
+  async (req: any, res, next) => {
+    if (req.query.redirect) {
+      console.log('on the if statement');
+      redirectUrl = req.query.redirect;
+    }
+    next();
+  },
   passport.authenticate('google', { scope: ['profile', 'email', 'openid'] })
 );
 
 router.get(
   '/callback',
   passport.authenticate('google', {
-    failureRedirect: process.env.LOGIN_URL,
+    failureRedirect: isProd
+      ? process.env.PROD_LOGIN_URL
+      : process.env.DEV_LOGIN_URL,
   }),
   (req, res) => {
-    res.redirect(process.env.LOGIN_SUCCESS_URL);
+    if (redirectUrl) {
+      res.redirect(`${redirectUrl}cookies=${JSON.stringify(req.cookies)}`);
+      redirectUrl = '';
+      return;
+    }
+    res.redirect(
+      isProd
+        ? process.env.PROD_LOGIN_SUCCESS_URL
+        : process.env.DEV_LOGIN_SUCCESS_URL
+    );
   }
 );
 export { router };

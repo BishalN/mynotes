@@ -23,6 +23,7 @@ export default function useLogin() {
       },
       onSuccess: (data) => {
         // console.log(data);
+        console.log(data);
       },
       onError: (err: any) => {
         // console.log(err.response);

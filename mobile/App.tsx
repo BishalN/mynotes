@@ -8,6 +8,7 @@ import { QueryClientProvider, QueryClient } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Login } from './src/screens/Login';
+import { Dash } from './src/screens/Dash';
 
 const queryClient = new QueryClient();
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,11 @@ export default function App() {
             <Stack.Screen
               name='Login'
               component={Login}
+              options={{ headerShown: false }}
+            ></Stack.Screen>
+            <Stack.Screen
+              name='Dash'
+              component={Dash}
               options={{ headerShown: false }}
             ></Stack.Screen>
           </Stack.Navigator>

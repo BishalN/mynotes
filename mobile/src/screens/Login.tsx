@@ -3,10 +3,8 @@ import { Box, Button, Input, Text, useToast, VStack } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import useLogin from '../hooks/mutation/useLogin';
 import { LoginError } from '../hooks/mutation/useRegister';
-
-export type OnChangeEvent = React.ChangeEvent<HTMLInputElement>;
-export type InputError = { field: string; message: string };
-export type InputErrors = InputError[];
+import { OauthButton } from '../components/OauthButton';
+import { InputErrors } from '../utils/types';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation();
@@ -67,6 +65,9 @@ export const Login: React.FC = () => {
               { field: err.field, message: err.message },
             ]);
           }
+        },
+        onSuccess: (data) => {
+          console.log(data);
         },
       }
     );
@@ -135,17 +136,9 @@ export const Login: React.FC = () => {
             </Text>
           </VStack>
 
-          <Button.Group direction='column' alignSelf='flex-start' w='full'>
-            <Button textAlign='center' colorScheme='gray' p='3' px='10'>
-              Continue with google
-            </Button>
-            <Button colorScheme='gray' p='3' px='10'>
-              Continue with facebook
-            </Button>
-            <Button colorScheme='gray' p='3' px='10'>
-              Continue with github
-            </Button>
-          </Button.Group>
+          <OauthButton provider='google' />
+          <OauthButton provider='facebook' />
+          <OauthButton provider='github' />
         </Box>
       </Box>
     </Box>

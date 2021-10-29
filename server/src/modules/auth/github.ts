@@ -3,6 +3,7 @@ import { Strategy as GithubStrategy } from 'passport-github2';
 import express from 'express';
 import { prismaClient } from '../../context';
 import { User } from '.prisma/client';
+import { isProd } from '../../utils/isProd';
 
 const router = express.Router();
 
@@ -11,7 +12,9 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL,
+      callbackURL: isProd
+        ? process.env.PROD_GITHUB_CALLBACK_URL
+        : process.env.DEV_GITHUB_CALLBACK_URL,
       scope: ['profile', 'email', 'openid'],
     },
     async (req, res, profile, cb) => {
@@ -48,8 +51,17 @@ passport.use(
   )
 );
 
+let redirectUrl: string;
+
 router.get(
   '/',
+  async (req: any, res, next) => {
+    if (req.query.redirect) {
+      console.log('on the if statement');
+      redirectUrl = req.query.redirect;
+    }
+    next();
+  },
   passport.authenticate('github', {
     scope: ['profile', 'email', 'openid'],
   })
@@ -58,10 +70,19 @@ router.get(
 router.get(
   '/callback',
   passport.authenticate('github', {
-    failureRedirect: process.env.LOGIN_URL,
+    failureRedirect: isProd
+      ? process.env.PROD_LOGIN_URL
+      : process.env.DEV_LOGIN_URL,
   }),
   (req, res) => {
-    res.redirect(process.env.LOGIN_SUCCESS_URL);
+    if (redirectUrl) {
+      res.redirect(`${redirectUrl}cookies=${JSON.stringify(req.cookies)}`);
+      redirectUrl = '';
+      return;
+    }
+    res.redirect(
+      isProd ? process.env.PROD_LOGIN_SUCCESS_URL : process.env.DEV_LOGIN_URL
+    );
   }
 );
 export { router };

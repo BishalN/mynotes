@@ -4,6 +4,7 @@ import axios from 'axios';
 import express from 'express';
 import { prismaClient } from '../../context';
 import { User } from '.prisma/client';
+import { isProd } from '../../utils/isProd';
 
 const router = express.Router();
 
@@ -12,7 +13,9 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+      callbackURL: isProd
+        ? process.env.PROD_FACEBOOK_CALLBACK_URL
+        : process.env.DEV_FACEBOOK_CALLBACK_URL,
     },
     async (accessToken, _, profile, cb) => {
       const {
@@ -62,16 +65,38 @@ passport.use(
   )
 );
 
-router.get('/', passport.authenticate('facebook'));
+let redirectUrl: string;
+
+router.get(
+  '/',
+  async (req: any, res, next) => {
+    if (req.query.redirect) {
+      console.log('on the if statement');
+      redirectUrl = req.query.redirect;
+    }
+    next();
+  },
+  passport.authenticate('facebook')
+);
 
 router.get(
   '/callback',
   passport.authenticate('facebook', {
-    failureRedirect: process.env.LOGIN_URL,
+    failureRedirect: isProd
+      ? process.env.PROD_LOGIN_URL
+      : process.env.DEV_LOGIN_URL,
   }),
   (req, res) => {
-    //set the cookie to the browser with some token
-    res.redirect(process.env.LOGIN_SUCCESS_URL);
+    if (redirectUrl) {
+      res.redirect(`${redirectUrl}cookies=${JSON.stringify(req.cookies)}`);
+      redirectUrl = '';
+      return;
+    }
+    res.redirect(
+      isProd
+        ? process.env.PROD_LOGIN_SUCCESS_URL
+        : process.env.DEV_LOGIN_SUCCESS_URL
+    );
   }
 );
 export { router };
