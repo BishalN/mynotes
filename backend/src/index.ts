@@ -2,6 +2,8 @@ import fastify from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import fastifyEnv, { fastifyEnvOpt } from 'fastify-env';
 
+//thisisabreakingchange
+
 const app = fastify({ logger: true });
 
 const schema = {
