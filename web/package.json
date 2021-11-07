@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@mynotes/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,10 +11,12 @@
   "dependencies": {
     "add": "^2.0.6",
     "axios": "^0.24.0",
+    "formik": "^2.2.9",
     "next": "11.1.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-query": "^3.28.0",
+    "react-toastify": "^8.0.3",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

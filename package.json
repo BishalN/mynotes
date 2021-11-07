@@ -1,0 +1,19 @@
+{
+  "name": "mynotes",
+  "version": "1.0.0",
+  "private": "true",
+  "main": "index.js",
+  "workspaces": {
+    "packages": [
+      "mobile",
+      "web",
+      "backend"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  },
+  "repository": "https://github.com/bishaln/mynotes",
+  "author": "Bishal Neupane <neupanebishal07@gmail.com>",
+  "license": "MIT"
+}

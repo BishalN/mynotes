@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import Link from 'next/link';
 
 import { Button } from '../components/Button';
@@ -12,7 +14,7 @@ import useRegister from '../hooks/mutation/useRegister';
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { mutate } = useRegister();
+  const { mutate, isLoading, isSuccess } = useRegister();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<InputErrors>([]);
@@ -57,6 +59,26 @@ const Home: NextPage = () => {
               { field: err.field, message: err.message },
             ]);
           }
+        },
+        onSuccess: (data) => {
+          //Display a toast or the redirect to the login page
+          toast.success('Register successfull', {
+            position: 'bottom-left',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          toast.info('Please verify your email address before logging in', {
+            position: 'bottom-left',
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          // router.push('/');
         },
       }
     );
@@ -131,11 +153,16 @@ const Home: NextPage = () => {
                 )}
                 <button
                   type='button'
+                  disabled={isLoading || isSuccess}
                   onClick={registerHandler}
-                  className='bg-gray-300 w-52 hover:bg-gray-400
-                 focus:ring-2 focus:ring-gray-800 self-center rounded-md p-2 '
+                  className={`${
+                    isLoading || isSuccess
+                      ? 'bg-gray-200'
+                      : 'bg-gray-300 w-52 hover:bg-gray-400'
+                  } 
+                 focus:ring-2 focus:ring-gray-800 self-center rounded-md p-2 `}
                 >
-                  Register
+                  {isLoading ? 'Registering' : 'Register'}
                 </button>
                 <span>
                   Already have an account?{' '}
@@ -150,6 +177,7 @@ const Home: NextPage = () => {
               <Button>Continue with github</Button>
             </div>
           </section>
+          <ToastContainer />
         </main>
       </div>
     </div>

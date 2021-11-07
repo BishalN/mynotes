@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import { Spinner } from '../components/Spinner';
 import useLogin, { LoginError } from '../hooks/mutation/useLogin';
 
 export type OnChangeEvent = React.ChangeEvent<HTMLInputElement>;
@@ -130,14 +131,9 @@ const Home: NextPage = () => {
                       </span>
                     )
                 )}
-                <button
-                  type='button'
-                  onClick={loginHandler}
-                  className='bg-gray-300 w-52 hover:bg-gray-400
-                 focus:ring-2 focus:ring-gray-800 self-center rounded-md p-2 '
-                >
+                <Button loading={isLoading} onClick={loginHandler}>
                   Login
-                </button>
+                </Button>
                 <span>
                   Don't have an account?{' '}
                   <span className='text-blue-500'>
