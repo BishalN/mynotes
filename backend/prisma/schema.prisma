@@ -10,7 +10,7 @@ datasource db {
 model User {
     id                  Int      @id @default(autoincrement())
     email               String?  @unique
-    phoneNumber         Int      @unique
+    phoneNumber         Int?     @unique
     password            String?
     name                String?
     notes               Note[]
@@ -33,6 +33,8 @@ model Note {
 }
 
 enum Provider {
-    phoneNumber
-    email
+    github
+    facebook
+    google
+    local
 }
