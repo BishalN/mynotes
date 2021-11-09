@@ -33,4 +33,32 @@ export const GithubPublicUserDataType = {
   updated_at: "2021-10-25T16:55:13Z",
 };
 
+export const GoogleUserDataType = {
+  sub: "101308876016573725254",
+  name: "Bishal Neupane",
+  given_name: "Bishal",
+  family_name: "Neupane",
+  picture:
+    "https://lh3.googleusercontent.com/a-/AOh14GgkyzMhg3ICB-Fy1_DLGWYSKiXRicilSoaXqJz7Eg=s96-c",
+  email: "neupanebishal07@gmail.com",
+  email_verified: true,
+  locale: "en",
+};
+
+export const FacebookUserDataType = {
+  id: "1522580281435621",
+  name: "Bishal Neupane",
+  email: null,
+  picture: {
+    data: {
+      height: 50,
+      is_silhouette: false,
+      url: "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=1522580281435621&height=50&width=50&ext=1639032767&hash=AeQ_UiLVoiVgiJQNuaE",
+      width: 50,
+    },
+  },
+};
+
 export type githubType = typeof GithubPublicUserDataType;
+export type googleType = typeof GoogleUserDataType;
+export type facebookType = typeof FacebookUserDataType;
