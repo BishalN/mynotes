@@ -62,3 +62,18 @@ export const FacebookUserDataType = {
 export type githubType = typeof GithubPublicUserDataType;
 export type googleType = typeof GoogleUserDataType;
 export type facebookType = typeof FacebookUserDataType;
+
+export type JwtPayload = { userId: string };
+
+export interface UserRegisterInput {
+  email: string;
+  password: string;
+  name: string;
+}
+export interface VerifyEmailInput {
+  token: string;
+}
+export interface ChangePasswordInput {
+  password: string;
+  token: string;
+}

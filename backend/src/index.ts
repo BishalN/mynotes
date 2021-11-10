@@ -25,6 +25,7 @@ const schema = {
     "GOOGLE_CLIENT_SECRET",
     "FACEBOOK_CLIENT_ID",
     "FACEBOOK_CLIENT_SECRET",
+    "SEND_GRID_API_KEY",
   ],
 };
 
@@ -38,6 +39,7 @@ app.register(fastifyEnv, options);
 app.register(import("./modules/auth/github"));
 app.register(import("./modules/auth/google"));
 app.register(import("./modules/auth/facebook"));
+app.register(import("./modules/auth/local"));
 
 const main = async () => {
   try {
