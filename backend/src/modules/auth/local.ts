@@ -106,7 +106,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
     },
     async function (request, reply) {
       const { token } = request.query;
-      const payload = jwt.verify(token, "thisisprivatekey");
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
 
       const user = await prisma.user.findUnique({
         where: { id: +(payload as JwtPayload).userId },
@@ -150,7 +150,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
     { schema: changepasswordSchema, validatorCompiler: validationCompiler },
     async function (request, reply) {
       const { password, token } = request.body;
-      const payload = jwt.verify(token, "thisisprivatekey");
+      const payload = jwt.verify(token, process.env.JWT_SECRET);
       const userId = +(payload as JwtPayload).userId;
       const user = await prisma.user.findUnique({ where: { id: userId } });
       if (!user) throw new Error("User not found");

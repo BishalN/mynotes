@@ -26,6 +26,7 @@ const schema = {
     "FACEBOOK_CLIENT_ID",
     "FACEBOOK_CLIENT_SECRET",
     "SEND_GRID_API_KEY",
+    "JWT_SECRET",
   ],
 };
 
