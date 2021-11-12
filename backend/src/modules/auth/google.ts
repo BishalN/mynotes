@@ -3,7 +3,7 @@ import oauthPlugin from "fastify-oauth2";
 import axios from "axios";
 import { googleType } from "../../utils/types";
 import { genAccessToken } from "../../utils/genToken";
-import { prisma } from "../../server";
+import { prisma } from "../../prismaClient";
 
 export default async function GoogleOAuth(app: FastifyInstance, opts) {
   app.register(oauthPlugin, {

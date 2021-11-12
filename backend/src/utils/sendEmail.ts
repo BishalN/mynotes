@@ -12,6 +12,8 @@ export const sendEmailVerification = async (token: string, email: string) => {
   };
 
   await sgmail.send(msg);
+
+  return "email successfully sent";
 };
 
 export const sendChangePasswordEmail = async (token: string, email: string) => {
@@ -27,4 +29,6 @@ export const sendChangePasswordEmail = async (token: string, email: string) => {
   };
 
   await sgmail.send(msg);
+
+  return "email successfully sent";
 };
