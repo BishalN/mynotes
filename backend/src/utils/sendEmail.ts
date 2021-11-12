@@ -7,7 +7,7 @@ export const sendEmailVerification = async (token: string, email: string) => {
     from: "neupanebishal07@gmail.com",
     subject: "Mynotes Email verification",
     html: `<strong>
-    <a href="http://localhost:4000/verify/email?token${token}"">
+    <a href="http://localhost:4000/verify/email?token=${token}"">
     Click this link to verify</a> your email this link will expire in 1hr</strong>`,
   };
 

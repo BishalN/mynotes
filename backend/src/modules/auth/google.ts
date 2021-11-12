@@ -3,8 +3,7 @@ import oauthPlugin from "fastify-oauth2";
 import axios from "axios";
 import { googleType } from "../../utils/types";
 import { genAccessToken } from "../../utils/genToken";
-import { User } from "@prisma/client";
-import { prisma } from "../../index";
+import { prisma } from "../../server";
 
 export default async function GoogleOAuth(app: FastifyInstance, opts) {
   app.register(oauthPlugin, {
@@ -32,16 +31,17 @@ export default async function GoogleOAuth(app: FastifyInstance, opts) {
     );
 
     const userData: googleType = res.data;
-    let user: User;
 
-    user = await prisma.user.findFirst({
+    let user = await prisma.user.findFirst({
       where: {
-        OR: [{ email: userData?.email, googleId: userData.sub }],
+        email: userData.email,
       },
     });
 
-    // if (user && user.provider != "google")
-    //   reply.send({ message: "Bad request" });
+    if (user && user.provider != "google")
+      throw new Error(
+        `this account is not associated with your google account please login using your ${user.provider} credentials`
+      );
 
     if (!user) {
       user = await createUserFromGoogleData(userData);

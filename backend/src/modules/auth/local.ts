@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { User } from "@prisma/client";
-import { prisma } from "../../index";
+import { prisma } from "../../server";
 import {
   changepasswordRequestSchema,
   changepasswordSchema,
@@ -71,7 +71,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
       }
       const { password: _, ...rest } = user;
       const token = genAccessToken(user.id);
-      reply.send({ token, rest });
+      reply.send({ token, user: rest });
     }
   );
 
@@ -123,7 +123,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
   );
 
   app.get<{ Querystring: Omit<UserRegisterInput, "name" | "password"> }>(
-    "changepassword/request",
+    "/changepassword/request",
     {
       schema: changepasswordRequestSchema,
       validatorCompiler: validationCompiler,
@@ -146,7 +146,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
   );
 
   app.post<{ Body: ChangePasswordInput }>(
-    "changepassword",
+    "/changepassword",
     { schema: changepasswordSchema, validatorCompiler: validationCompiler },
     async function (request, reply) {
       const { password, token } = request.body;
@@ -154,6 +154,10 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
       const userId = +(payload as JwtPayload).userId;
       const user = await prisma.user.findUnique({ where: { id: userId } });
       if (!user) throw new Error("User not found");
+      if (user.provider != "local")
+        throw new Error(
+          `this user is associate with ${user.provider} please change your ${user.provider} password`
+        );
       const hashedPassword = await bcrypt.hash(password, 12);
       await prisma.user.update({
         where: { id: user.id },

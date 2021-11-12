@@ -4,7 +4,7 @@ import axios from "axios";
 import { githubType } from "../../utils/types";
 import { genAccessToken } from "../../utils/genToken";
 import { User } from "@prisma/client";
-import { prisma } from "../../index";
+import { prisma } from "../../server";
 
 export default async function GithubAuth(app: FastifyInstance, opts) {
   app.register(oauthPlugin, {
@@ -29,13 +29,17 @@ export default async function GithubAuth(app: FastifyInstance, opts) {
     });
 
     const userData: githubType = res.data;
-    let user: User;
 
-    user = await prisma.user.findFirst({
+    let user = await prisma.user.findFirst({
       where: {
-        OR: [{ email: userData?.email, githubId: String(userData.id) }],
+        githubId: String(userData.id),
       },
     });
+
+    if (user && user.provider != "github")
+      throw new Error(
+        `this account is not associated with your github account please login using your ${user.provider} credentials`
+      );
 
     if (!user) {
       user = await createUserFromGithubData(userData);

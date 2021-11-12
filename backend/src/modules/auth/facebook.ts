@@ -4,7 +4,7 @@ import axios from "axios";
 import { facebookType } from "../../utils/types";
 import { genAccessToken } from "../../utils/genToken";
 import { User } from "@prisma/client";
-import { prisma } from "../../index";
+import { prisma } from "../../server";
 
 export default async function FacebookOAuth(app: FastifyInstance, opts) {
   app.register(oauthPlugin, {
@@ -35,9 +35,14 @@ export default async function FacebookOAuth(app: FastifyInstance, opts) {
 
     user = await prisma.user.findFirst({
       where: {
-        OR: [{ email: userData?.email, facebookId: userData.id }],
+        facebookId: userData.id,
       },
     });
+
+    if (user && user.provider != "github")
+      throw new Error(
+        `this account is not associated with your facebook account please login using your ${user.provider} credentials`
+      );
 
     if (!user) {
       user = await createUserFromFacebookData(userData);
