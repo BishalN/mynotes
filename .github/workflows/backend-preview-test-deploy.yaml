@@ -57,4 +57,5 @@ jobs:
           heroku_app_name: "bishalmynotespreview"
           heroku_email: "bishalisontheline@gmail.com"
           appdir: "backend"
+          branch: "staging"
           usedocker: true
