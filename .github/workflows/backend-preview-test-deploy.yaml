@@ -20,7 +20,7 @@ on:
       - "backend/**/**"
 jobs:
   previewtestdeploy:
-    name: inetegeration-tests
+    name: previewtestdeploy
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -52,6 +52,8 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
+      - name: Workaround issue
+        run: git config user.email "neupanebishal07@gmail.com" && git config user.name "bishalneupane" && git add -A && git commit -m "Updated code"
       - name: Deploy to Heroku
         uses: AkhileshNS/heroku-deploy@v3.12.12
         with:
