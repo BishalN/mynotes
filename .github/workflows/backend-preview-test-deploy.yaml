@@ -13,7 +13,7 @@ on:
     paths:
       - "backend/**/**"
 jobs:
-  tests:
+  previewtestdeploy:
     name: inetegeration-tests
     runs-on: ubuntu-latest
     defaults:
@@ -44,3 +44,9 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "bishalmynotespreview"
+          heroku_email: "bishalisontheline@gmail.com"
