@@ -43,7 +43,6 @@ jobs:
         with:
           node-version: "14"
           cache: "yarn"
-
       - name: Install yarn globally
         run: npm i -g yarn
       - name: Install dependencies
@@ -52,12 +51,11 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - name: Deploy to Heroku
-        uses: AkhileshNS/heroku-deploy@v3.12.12
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "bishalmynotespreview"
-          heroku_email: "bishalisontheline@gmail.com"
-          appdir: "backend"
-          branch: "staging"
-          usedocker: true
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
