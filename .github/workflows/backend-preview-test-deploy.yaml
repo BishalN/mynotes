@@ -42,8 +42,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
-      - name: Print the current working directory
-        run: pwd
+          cache: "yarn"
+
       - name: Install yarn globally
         run: npm i -g yarn
       - name: Install dependencies
@@ -52,8 +52,6 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - name: Workaround issue
-        run: git config user.email "neupanebishal07@gmail.com" && git config user.name "bishalneupane" && git add -A && git commit -m "Updated code"
       - name: Deploy to Heroku
         uses: AkhileshNS/heroku-deploy@v3.12.12
         with:
