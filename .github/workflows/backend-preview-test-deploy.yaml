@@ -42,6 +42,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
+      - name: Print the current working directory
+        run: pwd
       - name: Install yarn globally
         run: npm i -g yarn
       - name: Install dependencies
@@ -50,9 +52,12 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - name: Docker build
-        run: docker login --username=_ --password=${{secrets.HEROKU_API_KEY}} registry.heroku.com
-      - name: Publish
-        run: heroku container:push web -a bishalmyapppreview
-      - name: Release
-        run: heroku container:release web -a bishalmyapppreview
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "bishalmynotespreview"
+          heroku_email: "bishalisontheline@gmail.com"
+          appdir: "backend"
+          branch: "staging"
+          usedocker: true
