@@ -50,12 +50,10 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - name: Deploy to Heroku
-        uses: AkhileshNS/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "bishalmynotespreview"
-          heroku_email: "bishalisontheline@gmail.com"
-          appdir: "backend"
-          branch: "staging"
-          usedocker: true
+      - name: Docker build
+        run: docker login --username=_ --password=${{secrets.HEROKU_API_KEY}} registry.heroku.com
+         # Push the Docker image to Heroku Container Registry
+      - name: Publish
+        run: |
+        heroku container:push web -a $APP_NAME
+        heroku container:release web -a $APP_NAME
