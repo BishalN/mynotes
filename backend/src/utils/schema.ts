@@ -28,10 +28,8 @@ export const changepasswordRequestSchema = {
 };
 
 export const changepasswordSchema = {
-  querystring: joi
-    .object()
-    .keys({
-      token: joi.string().required(),
-      password: joi.string().min(6).required(),
-    }),
+  body: joi.object().keys({
+    token: joi.string().required(),
+    password: joi.string().min(6).required(),
+  }),
 };

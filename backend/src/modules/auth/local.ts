@@ -76,7 +76,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
   );
 
   app.get<{ Querystring: Omit<UserRegisterInput, "name" | "password"> }>(
-    "/verify/request",
+    "/emailverify/request",
     {
       schema: emailVerificationRequestSchema,
       validatorCompiler: validationCompiler,
@@ -99,7 +99,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
   );
 
   app.get<{ Querystring: VerifyEmailInput }>(
-    "/verify/email",
+    "/verifyemail",
     {
       schema: emailVerificationSchema,
       validatorCompiler: validationCompiler,
