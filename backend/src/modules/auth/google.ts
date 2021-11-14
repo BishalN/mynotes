@@ -17,7 +17,7 @@ export default async function GoogleOAuth(app: FastifyInstance, opts) {
     },
     scope: ["email", "profile"],
     startRedirectPath: "/login/google",
-    callbackUri: process.env.GOOGLE_CALLBACK_URI,
+    callbackUri: String(process.env.GOOGLE_CALLBACK_URI),
   });
 
   app.get("/login/google/callback", async function (request, reply) {

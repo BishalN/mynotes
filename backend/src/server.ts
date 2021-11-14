@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import fastifyEnv, { fastifyEnvOpt } from "fastify-env";
 import { OAuth2Namespace } from "fastify-oauth2";
+import { string } from "joi";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -30,6 +31,7 @@ const schema = {
 const options: fastifyEnvOpt = {
   confKey: "config",
   schema: schema,
+  dotenv: true,
 };
 
 app.register(fastifyEnv, options);

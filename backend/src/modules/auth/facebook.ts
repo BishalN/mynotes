@@ -19,7 +19,7 @@ export default async function FacebookOAuth(app: FastifyInstance, opts) {
     },
     scope: [],
     startRedirectPath: "/login/facebook",
-    callbackUri: process.env.FACEBOOK_CALLBACK_URI,
+    callbackUri: String(process.env.FACEBOOK_CALLBACK_URI),
   });
 
   app.get("/login/facebook/callback", async function (request, reply) {
