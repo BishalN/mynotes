@@ -13,5 +13,7 @@ RUN yarn prisma generate
 
 ENV NODE_ENV production
 
+EXPOSE 4000
+
 CMD [ "node", "dist/index.js" ]
 USER node

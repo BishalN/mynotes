@@ -1,20 +1,14 @@
 name: backend:previewtestdeploy
 
 on:
-  push:
-    branches:
-      - staging
-    paths:
-      - ".github/workflows/backend-preview-test-deploy.yaml"
-      - "backend/**/**"
   pull_request:
     branches:
-      - staging
+      - master
     paths:
       - "backend/**/**"
 jobs:
-  previewtestdeploy:
-    name: previewtestdeploy
+  prodtestdeploy:
+    name: prodtestdeploy
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -48,8 +42,8 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "mynotestaging"
+          heroku_app_name: "mynotesprod"
           heroku_email: "neupanebishal07@gmail"
           usedocker: true
           appdir: "backend"
-          branch: "staging"
+          branch: "master"
