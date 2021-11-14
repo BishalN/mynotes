@@ -1,4 +1,4 @@
-FROM node
+FROM node:latest
 
 WORKDIR /usr/src/app
 COPY package.json ./
@@ -9,6 +9,7 @@ RUN yarn install
 COPY . .
 
 RUN yarn build
+RUN yarn prisma generate
 
 ENV NODE_ENV production
 

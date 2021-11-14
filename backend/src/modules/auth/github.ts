@@ -3,7 +3,7 @@ import oauthPlugin from "fastify-oauth2";
 import axios from "axios";
 import { githubType } from "../../utils/types";
 import { genAccessToken } from "../../utils/genToken";
-import { User } from "@prisma/client";
+
 import { prisma } from "../../prismaClient";
 
 export default async function GithubAuth(app: FastifyInstance, opts) {

@@ -51,11 +51,12 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - name: executing remote ssh commands using ssh key
-        uses: appleboy/ssh-action@master
+      - name: Heroku Deploy
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: cat key.txt
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "mynotestaging"
+          heroku_email: "neupanebishal07@gmail"
+          usedocker: true
+          appdir: "backend"
+          branch: "staging"
