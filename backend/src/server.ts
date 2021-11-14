@@ -24,6 +24,9 @@ const schema = {
     "FACEBOOK_CLIENT_SECRET",
     "SEND_GRID_API_KEY",
     "JWT_SECRET",
+    "GOOGLE_CALLBACK_URI",
+    "FACEBOOK_CALLBACK_URI",
+    "GITHUB_CALLBACK_URI",
   ],
 };
 

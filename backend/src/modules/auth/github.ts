@@ -18,7 +18,7 @@ export default async function GithubAuth(app: FastifyInstance, opts) {
     },
     scope: ["email", "public_profile"],
     startRedirectPath: "/login/github",
-    callbackUri: "http://localhost:4000/login/github/callback",
+    callbackUri: process.env.GITHUB_CALLBACK_URL,
   });
 
   app.get("/login/github/callback", async function (request, reply) {
