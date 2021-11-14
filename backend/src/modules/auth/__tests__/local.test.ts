@@ -1,6 +1,6 @@
 import app from "../../../server";
 import { prisma } from "../../../prismaClient";
-import { User } from ".prisma/client";
+import { User } from "../../../../prisma/index";
 import bcrypt from "bcryptjs";
 import {
   genEmailVerificationToken,

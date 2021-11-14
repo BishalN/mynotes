@@ -1,6 +1,0 @@
-backend:
-  - backend/**/*
-mobile:
-  - mobile/**/*
-web:
-  - web/**/*

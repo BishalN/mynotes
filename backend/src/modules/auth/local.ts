@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { User } from "@prisma/client";
+import { User } from "../../../prisma/index";
 import { prisma } from "../../prismaClient";
 import {
   changepasswordRequestSchema,
