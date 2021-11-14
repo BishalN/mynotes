@@ -1,4 +1,4 @@
-name: backend:previewtestdeploy
+name: backend:prodtest
 
 on:
   pull_request:
@@ -7,8 +7,8 @@ on:
     paths:
       - "backend/**/**"
 jobs:
-  prodtestdeploy:
-    name: prodtestdeploy
+  prodpullrequesttest:
+    name: prodpullrequesttest
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -39,11 +39,3 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "mynotesprod"
-          heroku_email: "neupanebishal07@gmail"
-          usedocker: true
-          appdir: "backend"
-          branch: "master"

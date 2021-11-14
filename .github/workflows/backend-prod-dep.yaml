@@ -1,0 +1,49 @@
+name: backend:prodtestanddep
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "backend/**/**"
+jobs:
+  prodtestanddep:
+    name: prodtestanddep
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    services:
+      db:
+        image: postgres:11
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mynotes_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "yarn"
+      - name: Install yarn globally
+        run: npm i -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run database migration
+        run: yarn tmg
+      - name: Run tests
+        run: yarn test
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "mynotesprod"
+          heroku_email: "neupanebishal07@gmail"
+          usedocker: true
+          appdir: "backend"
+          branch: "master"
