@@ -13,6 +13,8 @@ RUN yarn prisma generate
 
 ENV NODE_ENV production
 
-EXPOSE 4000
+# CMD gunicorn --bind 0.0.0.0:$PORT wsgi
+
+EXPOSE 8080
 CMD [ "node", "dist/index.js" ]
 USER node
