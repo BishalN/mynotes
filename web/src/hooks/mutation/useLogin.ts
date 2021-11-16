@@ -14,11 +14,15 @@ export const useLogin = () => {
         )
         .then((res) => res.data),
     {
-      onMutate: (values) => {},
+      onMutate: (values) => {
+        console.log(values);
+      },
       onSuccess: (data) => {
         console.log(data);
       },
-      onError: (err: any) => {},
+      onError: (err: any) => {
+        console.log(err);
+      },
     }
   );
 };

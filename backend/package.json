@@ -21,6 +21,7 @@
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "fastify": "^3.22.1",
+    "fastify-cors": "^6.0.2",
     "fastify-env": "^2.1.1",
     "fastify-oauth2": "^4.3.0",
     "joi": "^17.4.2",

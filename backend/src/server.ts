@@ -1,7 +1,7 @@
 import fastify from "fastify";
 import fastifyEnv, { fastifyEnvOpt } from "fastify-env";
+import fastifyCors from "fastify-cors";
 import { OAuth2Namespace } from "fastify-oauth2";
-import { string } from "joi";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -35,9 +35,17 @@ const options: fastifyEnvOpt = {
 };
 
 app.register(fastifyEnv, options);
+app.register(fastifyCors, {
+  origin: "*",
+});
 app.register(import("./modules/auth/github"));
 app.register(import("./modules/auth/google"));
 app.register(import("./modules/auth/facebook"));
 app.register(import("./modules/auth/local"));
+app.setErrorHandler(function (err, request, reply) {
+  this.log.error(err);
+  reply.status(400);
+  reply.send(err);
+});
 
 export default app;

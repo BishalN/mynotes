@@ -1,14 +1,22 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 import { Button, OauthButton } from "../components/Button";
-import { Input } from "../components/Input";
-
-export type OnChangeEvent = React.ChangeEvent<HTMLInputElement>;
+import { useLogin } from "../hooks/mutation/useLogin";
+import axios from "axios";
 
 const Home: NextPage = () => {
+  const { mutateAsync, isLoading } = useLogin();
+  useEffect(() => {
+    axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login/local`, {
+      email: "bisal@kdl.com",
+      password: "nooone",
+    });
+  }, []);
   return (
     <div>
       <Head>
@@ -43,25 +51,52 @@ const Home: NextPage = () => {
                 </h3>
               </div>
 
-              <form
-                action=""
-                className="flex flex-col w-full space-y-2 text-center"
+              <Formik
+                initialValues={{ email: "", password: "" }}
+                validationSchema={Yup.object({
+                  email: Yup.string()
+                    .email("Invalid email address")
+                    .required("Required"),
+                  password: Yup.string()
+                    .min(6, "Must be atleast 6 characters long")
+                    .required("Required"),
+                })}
+                onSubmit={async (values, { setSubmitting }) => {
+                  console.log("submitted");
+                  await mutateAsync(values, {
+                    onSettled: (data) => {
+                      console.log(data);
+                      setSubmitting(false);
+                    },
+                  });
+                }}
               >
-                <Input placeholder="Enter your email address" />
+                <Form className="flex flex-col w-full space-y-2 text-center">
+                  <label htmlFor="email" className="self-start">
+                    Email Address
+                  </label>
+                  <Field name="email" type="text" />
+                  <ErrorMsg name="email" />
 
-                <Input isPassword placeholder="Enter your password" />
+                  <label className="self-start" htmlFor="password">
+                    Password
+                  </label>
+                  <Field name="password" type="password" />
+                  <ErrorMsg name="password" />
 
-                <Button onClick={() => console.log("Login clicked")}>
-                  Login
-                </Button>
-                <span>
-                  Don't have an account?{" "}
-                  <span className="text-blue-500">
-                    <Link href="/register">Register</Link>
+                  <Button loading={isLoading} type="submit">
+                    Login
+                  </Button>
+                  <span>
+                    Don't have an account?{" "}
+                    <span className="text-blue-500">
+                      <Link href="/register">Register</Link>
+                    </span>
                   </span>
-                </span>
-                <div className="border-b-2 w-64 self-center border-black"></div>
-              </form>
+                  <div className="border-b-2 w-64 self-center border-black"></div>
+                </Form>
+              </Formik>
+
               <OauthButton provider="facebook">
                 Continue with facebook
               </OauthButton>
@@ -71,6 +106,14 @@ const Home: NextPage = () => {
           </section>
         </main>
       </div>
+    </div>
+  );
+};
+
+const ErrorMsg = ({ name }: { name: string }) => {
+  return (
+    <div className="self-start text-red-500 text-xs">
+      <ErrorMessage name={name} />
     </div>
   );
 };
