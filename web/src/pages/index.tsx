@@ -7,16 +7,10 @@ import * as Yup from "yup";
 
 import { Button, OauthButton } from "../components/Button";
 import { useLogin } from "../hooks/mutation/useLogin";
-import axios from "axios";
 
 const Home: NextPage = () => {
   const { mutateAsync, isLoading } = useLogin();
-  useEffect(() => {
-    axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/login/local`, {
-      email: "bisal@kdl.com",
-      password: "nooone",
-    });
-  }, []);
+
   return (
     <div>
       <Head>

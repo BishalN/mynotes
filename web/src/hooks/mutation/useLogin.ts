@@ -8,7 +8,7 @@ export const useLogin = () => {
     ({ email, password }: LoginType) =>
       axios
         .post(
-          `/local/login`,
+          `/login/local`,
           { password, email },
           { baseURL: process.env.NEXT_PUBLIC_API_BASE_URL }
         )

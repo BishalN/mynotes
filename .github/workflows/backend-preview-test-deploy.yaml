@@ -53,3 +53,4 @@ jobs:
           usedocker: true
           appdir: "backend"
           branch: "staging"
+          procfile: "release: yarn prisma migrate deploy"
