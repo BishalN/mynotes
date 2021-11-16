@@ -8,7 +8,7 @@ export default function useRegister() {
     ({ email, password, name }: RegisterType) =>
       axios
         .post(
-          `/login/register`,
+          `/register/local`,
           { password, email, name },
           { baseURL: process.env.NEXT_PUBLIC_API_BASE_URL }
         )

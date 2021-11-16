@@ -104,7 +104,7 @@ const Home: NextPage = () => {
   );
 };
 
-const ErrorMsg = ({ name }: { name: string }) => {
+export const ErrorMsg = ({ name }: { name: string }) => {
   return (
     <div className="self-start text-red-500 text-xs">
       <ErrorMessage name={name} />
