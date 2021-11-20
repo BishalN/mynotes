@@ -5,7 +5,6 @@ import Link from "next/link";
 import * as Yup from "yup";
 
 import { Button, OauthButton } from "../components/Button";
-import { useRouter } from "next/dist/client/router";
 import { Formik, Form, Field } from "formik";
 import { ErrorMsg } from ".";
 import useRegister from "../hooks/mutation/useRegister";
@@ -25,7 +24,6 @@ const Home: NextPage = () => {
           <h1 className="text-5xl m-5">MyNotes</h1>
         </section>
 
-        {/* by default the index page would be the login page */}
         <main>
           <section>
             <div
