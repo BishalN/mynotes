@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import * as Yup from "yup";
 
@@ -11,6 +11,7 @@ import useRegister from "../hooks/mutation/useRegister";
 
 const Home: NextPage = () => {
   const { isLoading, mutateAsync } = useRegister();
+  const [emailVerifyMessage, setEmailVerifyMessage] = useState("");
   return (
     <div>
       <Head>
@@ -59,17 +60,29 @@ const Home: NextPage = () => {
                     .min(3, "Must be atleast 3 characters long")
                     .required("Required"),
                 })}
-                onSubmit={async (values, { setSubmitting }) => {
-                  console.log("submitted");
+                onSubmit={async (values, { setFieldError }) => {
                   await mutateAsync(values, {
-                    onSettled: (data) => {
-                      console.log(data);
-                      setSubmitting(false);
+                    onError: (err) => {
+                      const msg: string = err.response.data.message;
+                      if (msg.includes("email"))
+                        return setFieldError("email", msg);
+                      if (msg.includes("name"))
+                        return setFieldError("name", msg);
+                      if (msg.includes("password"))
+                        return setFieldError("password", msg);
+                    },
+                    onSuccess: (data) => {
+                      setEmailVerifyMessage(data.message);
                     },
                   });
                 }}
               >
                 <Form className="flex flex-col w-full space-y-2 text-center">
+                  {emailVerifyMessage && (
+                    <span className="text-green-500 self-start">
+                      {emailVerifyMessage}
+                    </span>
+                  )}
                   <label htmlFor="name" className="self-start">
                     Full Name
                   </label>
@@ -88,7 +101,11 @@ const Home: NextPage = () => {
                   <Field name="password" type="password" />
                   <ErrorMsg name="password" />
 
-                  <Button loading={isLoading} type="submit">
+                  <Button
+                    loading={isLoading}
+                    type="submit"
+                    isDisabled={emailVerifyMessage.length > 1}
+                  >
                     Register
                   </Button>
                   <span>

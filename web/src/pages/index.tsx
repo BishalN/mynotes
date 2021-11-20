@@ -6,9 +6,11 @@ import * as Yup from "yup";
 
 import { Button, OauthButton } from "../components/Button";
 import { useLogin } from "../hooks/mutation/useLogin";
+import { useRouter } from "next/dist/client/router";
 
 const Home: NextPage = () => {
   const { mutateAsync, isLoading } = useLogin();
+  const router = useRouter();
 
   return (
     <div>
@@ -54,12 +56,18 @@ const Home: NextPage = () => {
                     .min(6, "Must be atleast 6 characters long")
                     .required("Required"),
                 })}
-                onSubmit={async (values, { setSubmitting }) => {
+                onSubmit={async (values, { setErrors }) => {
                   console.log("submitted");
                   await mutateAsync(values, {
-                    onSettled: (data) => {
-                      console.log(data);
-                      setSubmitting(false);
+                    onError: (err) => {
+                      setErrors({
+                        email: err.response.data.message,
+                        password: err.response.data.message,
+                      });
+                    },
+                    onSuccess: (data) => {
+                      localStorage.setItem("token", JSON.stringify(data.token));
+                      router.push("/dash");
                     },
                   });
                 }}
