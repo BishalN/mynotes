@@ -1,8 +1,10 @@
 import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
+import { isServer } from "./isServer";
 
 export const useIsAuth = () => {
-  const token = localStorage.getItem("token");
+  let token: string | null = "";
+  if (!isServer) token = localStorage.getItem("token");
   const router = useRouter();
   useEffect(() => {
     if (!token) router.push("/login");

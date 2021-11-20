@@ -52,7 +52,6 @@ export default async function FacebookOAuth(app: FastifyInstance, opts) {
     }
 
     reply.redirect(
-      200,
       isProd
         ? `${PROD_FRONTEND_URl}/oauth?token=${genAccessToken(user.id)}`
         : `${DEV_FRONTEND_URL}/oauth?token=${genAccessToken(user.id)}`
