@@ -29,6 +29,6 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - run: yarn install
+      - run: cd web && yarn install
       - run: cd web && yarn test:ci
         id: test
