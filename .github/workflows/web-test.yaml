@@ -1,0 +1,34 @@
+name: web:unit-tests
+
+on:
+  push:
+    branches:
+      - staging
+    paths:
+      - "web/**"
+  pull_request:
+    branches:
+      - staging
+    paths:
+      - "web/**"
+
+jobs:
+  test:
+    name: unit-tests-web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+      - name: Yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install
+      - run: cd web && yarn test:ci
+        id: test
