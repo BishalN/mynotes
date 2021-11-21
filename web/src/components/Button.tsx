@@ -17,6 +17,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type="button"
+      data-testid="button"
       className={`flex items-center justify-center w-full  bg-gray-500
   ml-2 p-2 text-white
     rounded-md hover:bg-gray-600 focus:shadow-md
@@ -27,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={isDisabled}
     >
       {loading ? (
-        <span className={`self-start`}>
+        <span role="loading" className={`self-start`}>
           <Spinner />
         </span>
       ) : null}
