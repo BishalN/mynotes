@@ -4,3 +4,5 @@ export interface ErrorResponse {
   statusCode?: number;
   name?: string;
 }
+
+export const sth = "hello";
