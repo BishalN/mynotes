@@ -6,6 +6,7 @@ on:
       - staging
     paths:
       - "web/**"
+      - ".github/workflows/web-test.yaml"
   pull_request:
     branches:
       - staging
