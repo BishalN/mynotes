@@ -6,6 +6,8 @@ import { genAccessToken } from "../../utils/genToken";
 import { User } from "../../../prisma/index";
 
 import { prisma } from "../../prismaClient";
+import { isProd } from "../../utils/isProd";
+import { DEV_FRONTEND_URL, PROD_FRONTEND_URl } from "../../utils/contants";
 
 export default async function FacebookOAuth(app: FastifyInstance, opts) {
   app.register(oauthPlugin, {
@@ -19,7 +21,7 @@ export default async function FacebookOAuth(app: FastifyInstance, opts) {
     },
     scope: [],
     startRedirectPath: "/login/facebook",
-    callbackUri: "http://localhost:4000/login/facebook/callback",
+    callbackUri: String(process.env.FACEBOOK_CALLBACK_URI),
   });
 
   app.get("/login/facebook/callback", async function (request, reply) {
@@ -49,9 +51,11 @@ export default async function FacebookOAuth(app: FastifyInstance, opts) {
       user = await createUserFromFacebookData(userData);
     }
 
-    const { password, ...rest } = user;
-
-    reply.send({ token: genAccessToken(user.id), user: rest });
+    reply.redirect(
+      isProd
+        ? `${PROD_FRONTEND_URl}/oauth?token=${genAccessToken(user.id)}`
+        : `${DEV_FRONTEND_URL}/oauth?token=${genAccessToken(user.id)}`
+    );
   });
 }
 

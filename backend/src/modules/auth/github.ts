@@ -5,6 +5,8 @@ import { githubType } from "../../utils/types";
 import { genAccessToken } from "../../utils/genToken";
 
 import { prisma } from "../../prismaClient";
+import { isProd } from "../../utils/isProd";
+import { DEV_FRONTEND_URL, PROD_FRONTEND_URl } from "../../utils/contants";
 
 export default async function GithubAuth(app: FastifyInstance, opts) {
   app.register(oauthPlugin, {
@@ -18,7 +20,7 @@ export default async function GithubAuth(app: FastifyInstance, opts) {
     },
     scope: ["email", "public_profile"],
     startRedirectPath: "/login/github",
-    callbackUri: "http://localhost:4000/login/github/callback",
+    callbackUri: String(process.env.GITHUB_CALLBACK_URL),
   });
 
   app.get("/login/github/callback", async function (request, reply) {
@@ -45,9 +47,11 @@ export default async function GithubAuth(app: FastifyInstance, opts) {
       user = await createUserFromGithubData(userData);
     }
 
-    const { password, ...rest } = user;
-
-    reply.send({ token: genAccessToken(user.id), user: rest });
+    reply.redirect(
+      isProd
+        ? `${PROD_FRONTEND_URl}/oauth?token=${genAccessToken(user.id)}`
+        : `${DEV_FRONTEND_URL}/oauth?token=${genAccessToken(user.id)}`
+    );
   });
 }
 

@@ -1,5 +1,9 @@
 import joi from "joi";
 
+export const userAuthorizationSchema = {
+  headers: joi.object().keys({ Authorization: joi.string().required() }),
+};
+
 export const userRegisterSchema = {
   body: joi.object().keys({
     email: joi.string().email().required(),

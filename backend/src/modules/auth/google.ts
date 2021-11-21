@@ -4,6 +4,8 @@ import axios from "axios";
 import { googleType } from "../../utils/types";
 import { genAccessToken } from "../../utils/genToken";
 import { prisma } from "../../prismaClient";
+import { isProd } from "../../utils/isProd";
+import { DEV_FRONTEND_URL, PROD_FRONTEND_URl } from "../../utils/contants";
 
 export default async function GoogleOAuth(app: FastifyInstance, opts) {
   app.register(oauthPlugin, {
@@ -17,7 +19,7 @@ export default async function GoogleOAuth(app: FastifyInstance, opts) {
     },
     scope: ["email", "profile"],
     startRedirectPath: "/login/google",
-    callbackUri: "http://localhost:4000/login/google/callback",
+    callbackUri: String(process.env.GOOGLE_CALLBACK_URI),
   });
 
   app.get("/login/google/callback", async function (request, reply) {
@@ -47,9 +49,11 @@ export default async function GoogleOAuth(app: FastifyInstance, opts) {
       user = await createUserFromGoogleData(userData);
     }
 
-    const { password, ...rest } = user;
-
-    reply.send({ token: genAccessToken(user.id), user: rest });
+    reply.redirect(
+      isProd
+        ? `${PROD_FRONTEND_URl}/oauth?token=${genAccessToken(user.id)}`
+        : `${DEV_FRONTEND_URL}/oauth?token=${genAccessToken(user.id)}`
+    );
   });
 }
 

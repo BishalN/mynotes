@@ -10,6 +10,7 @@
     "start": "node dist/index.js",
     "migrate": "prisma migrate dev",
     "test": "dotenv -e .env.test jest --detectOpenHandles --watchAll",
+    "test:ci": "jest --ci",
     "tmg": "dotenv -e .env.test -- npx prisma migrate dev --name postgres-init"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "fastify": "^3.22.1",
+    "fastify-cors": "^6.0.2",
     "fastify-env": "^2.1.1",
     "fastify-oauth2": "^4.3.0",
     "joi": "^17.4.2",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.16",
+    "@types/connect": "^3.4.35",
     "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/node": "^16.11.2",

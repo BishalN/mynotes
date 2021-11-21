@@ -6,6 +6,7 @@ import {
   changepasswordSchema,
   emailVerificationRequestSchema,
   emailVerificationSchema,
+  userAuthorizationSchema,
   userLoginSchema,
   userRegisterSchema,
 } from "../../utils/schema";
@@ -22,13 +23,18 @@ import {
 } from "../../utils/genToken";
 import jwt from "jsonwebtoken";
 import {
+  AuthorizationHeader,
   ChangePasswordInput,
   JwtPayload,
   UserRegisterInput,
   VerifyEmailInput,
 } from "../../utils/types";
+import { string } from "joi";
 
 export default async function LocalAuth(app: FastifyInstance, opts) {
+  app.get("/me", async (request, reply) => {
+    reply.send(request.user);
+  });
   app.post<{ Body: UserRegisterInput }>(
     "/register/local",
     {
@@ -151,7 +157,7 @@ export default async function LocalAuth(app: FastifyInstance, opts) {
     async function (request, reply) {
       const { password, token } = request.body;
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      const userId = +(payload as JwtPayload).userId;
+      const userId = (payload as JwtPayload).userId;
       const user = await prisma.user.findUnique({ where: { id: userId } });
       if (!user) throw new Error("User not found");
       if (user.provider != "local")

@@ -1,33 +1,24 @@
-import axios from 'axios';
-import { useMutation } from 'react-query';
+import axios from "axios";
+import { useMutation } from "react-query";
 
-export type LoginType = { email: string; password: string };
-export type LoginError = {
-  field: string;
-  message: string;
-};
+export type RegisterType = { email: string; password: string; name: string };
 
 export default function useRegister() {
   return useMutation(
-    ({ email, password }: LoginType) =>
+    ({ email, password, name }: RegisterType) =>
       axios
         .post(
-          `/auth/local`,
-          { password, email },
+          `/register/local`,
+          { password, email, name },
           { baseURL: process.env.NEXT_PUBLIC_API_BASE_URL }
         )
         .then((res) => res.data),
     {
-      onMutate: (values) => {
-        // console.log(values);
-      },
+      onMutate: (values) => {},
       onSuccess: (data) => {
-        // console.log(data);
         console.log(data);
       },
-      onError: (err: any) => {
-        // console.log(err.response);
-      },
+      onError: (err: any) => {},
     }
   );
 }
