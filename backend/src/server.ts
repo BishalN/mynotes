@@ -46,7 +46,7 @@ app.register(fastifyCors, {
   origin: "*",
 });
 
-//TODO: Use this only for the authenticated module
+//TODO: Use this only for the authenticated module todo
 app.addHook("onRequest", async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return;
