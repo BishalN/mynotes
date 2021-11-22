@@ -5,7 +5,7 @@ import fastifyCors from "fastify-cors";
 import { OAuth2Namespace } from "fastify-oauth2";
 import { prisma } from "./prismaClient";
 import { JwtPayload } from "./utils/types";
-import { User } from ".prisma/client";
+import { User } from "../prisma";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -46,7 +46,7 @@ app.register(fastifyCors, {
   origin: "*",
 });
 
-//TODO: Use this only for the authenticated module
+//TODO: Use this only for the authenticated module todo
 app.addHook("onRequest", async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return;

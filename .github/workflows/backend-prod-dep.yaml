@@ -39,12 +39,34 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "mynotesprod"
-          heroku_email: "neupanebishal07@gmail"
-          usedocker: true
-          appdir: "backend"
-          branch: "master"
-          procfile: "release: yarn prisma migrate deploy"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          push: true
+          tags: ghcr.io/bishaln/mynotes_prod:latest
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
+      - name: Deploy the docker image to azure containers
+        uses: Azure/aci-deploy@v1
+        with:
+          resource-group: mynotes
+          dns-name-label: mynoteprod
+          image: ghcr.io/bishaln/mynotes_prod:latest
+          registry-login-server: ghcr.io
+          registry-username: ${{ secrets.REGISTRY_USERNAME }}
+          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          name: mynoteprod
+          location: "Central India"
+          memory: 0.5
+          restart-policy: OnFailure
+          ports: 80 4000
+          secure-environment-variables: DATABASE_URL=${{secrets.DATABASE_URL_PROD}} FACEBOOK_CLIENT_ID=${{secrets.FACEBOOK_CLIENT_ID}} FACEBOOK_CLIENT_SECRET=${{secrets.FACEBOOK_CLIENT_SECRET}} GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} GITHUB_CLIENT_ID=${{secrets.PROD_GITHUB_CLIENT_ID}} GITHUB_CLIENT_SECRET=${{secrets.PROD_GITHUB_CLIENT_SECRET}} JWT_SECRET=${{secrets.JWT_SECRET}} FACEBOOK_CALLBACK_URI=${{secrets.PROD_FACEBOOK_CALLBACK_URI}} GITHUB_CALLBACK_URI=${{secrets.PROD_GITHUB_CALLBACK_URI}} GOOGLE_CALLBACK_URI=${{secrets.PROD_GOOGLE_CALLBACK_URI}} SEND_GRID_API_KEY=${{secrets.SEND_GRID_API_KEY}}

@@ -82,3 +82,5 @@ export interface ChangePasswordInput {
   password: string;
   token: string;
 }
+
+export const test = "tesssst";
