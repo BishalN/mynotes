@@ -48,15 +48,21 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - name: Build docker image
-        run: docker build -t bsal/mynotes_staging .
+      # - name: Build docker image
+      #   run: docker build -t bsal/mynotes_staging .
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Push the image to docker hub
-        run: docker push bsal/mynotes_staging
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: bsal/mynotes_staging:latest
+      # - name: Push the image to docker hub
+      #   run: docker push bsal/mynotes_staging
       - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
