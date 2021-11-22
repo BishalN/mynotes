@@ -17,19 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend
-    services:
-      db:
-        image: postgres:11
-        ports: ["5432:5432"]
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: mynotes_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        working-directory: ./web
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -40,11 +28,5 @@ jobs:
         run: npm i -g yarn
       - name: Install dependencies
         run: yarn
-      - name: Run database migration
-        run: yarn tmg
-      - name: Build the app server
-        run: yarn build
-      - name: Start the app server
-        run: yarn start
       - name: Run e2e tests
-        run: cd ../web && yarn test:e2e:ci
+        run: yarn test:e2e:ci

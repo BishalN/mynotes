@@ -2,7 +2,7 @@
   "baseUrl": "http://localhost:3000",
   "defaultCommandTimeout": 20000,
   "env": {
-    "apiBaseUrl": "http://localhost:4000"
+    "apiBaseUrl": "https://mynotesprod.herokuapp.com/"
   },
   "video": false,
   "screenshotOnRunFailure": false
