@@ -68,3 +68,6 @@ jobs:
           location: "Central India"
           memory: 0.5
           restart-policy: OnFailure
+          ports:
+            - 80
+            - 4000
