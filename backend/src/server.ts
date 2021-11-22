@@ -5,7 +5,7 @@ import fastifyCors from "fastify-cors";
 import { OAuth2Namespace } from "fastify-oauth2";
 import { prisma } from "./prismaClient";
 import { JwtPayload } from "./utils/types";
-import { User } from ".prisma/client";
+import { User } from "../prisma";
 
 declare module "fastify" {
   interface FastifyInstance {

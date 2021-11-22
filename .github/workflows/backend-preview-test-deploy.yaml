@@ -45,11 +45,19 @@ jobs:
         run: yarn tmg
       - name: Run tests
         run: yarn test
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - name: Build docker image
+        run: docker build -t bishaln/mynotes_staging .
+      - name: Push the image to docker hub
+        run: docker push bishaln/mynotes_staging
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "mynotestaging"
-          heroku_email: "neupanebishal07@gmail"
-          usedocker: true
-          appdir: "backend"
-          branch: "staging"
+          creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
+      - name: Deploy the docker image to azure containers
+        uses: Azure/aci-deploy@v1
+        with:
+          resource-group: mynotes
+          dns-name-label: mynotestaging.centralindia.azurecontainer.io
+          image: bishaln/mynotes_staging
+          name: mynotestaging
+          location: "Central India"
