@@ -19,41 +19,41 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
-    # services:
-    #   db:
-    #     image: postgres:11
-    #     ports: ["5432:5432"]
-    #     env:
-    #       POSTGRES_PASSWORD: postgres
-    #       POSTGRES_DB: mynotes_test
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 5
+    services:
+      db:
+        image: postgres:11
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mynotes_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
           cache: "yarn"
-      # - name: Install yarn globally
-      #   run: npm i -g yarn
-      # - name: Install dependencies
-      #   run: yarn
-      # - name: Run database migration
-      #   run: yarn tmg
-      # - name: Run tests
-      #   run: yarn test
-      # - name: Build docker image
-      #   run: docker build -t bsal/mynotes_staging .
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v1
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-      # - name: Push the image to docker hub
-      #   run: docker push bsal/mynotes_staging
+      - name: Install yarn globally
+        run: npm i -g yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Run database migration
+        run: yarn tmg
+      - name: Run tests
+        run: yarn test
+      - name: Build docker image
+        run: docker build -t bsal/mynotes_staging .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push the image to docker hub
+        run: docker push bsal/mynotes_staging
       - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
@@ -69,3 +69,4 @@ jobs:
           memory: 0.5
           restart-policy: OnFailure
           ports: 80 4000
+          secure-environment-variables: DATABASE_URL=${{secrets.DATABASE_URL_STAGING}} FACEBOOK_CLIENT_ID=${{secrets.FACEBOOK_CLIENT_ID}} FACEBOOK_CLIENT_SECRET=${{secrets.FACEBOOK_CLIENT_SECRET}} GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} GITHUB_CLIENT_ID=${{secrets.STAGING_GITHUB_CLIENT_ID}} GITHUB_CLIENT_SECRET=${{secrets.STAGING_GITHUB_CLIENT_SECRET}} JWT_SECRET=${{secrets.JWT_SECRET}} FACEBOOK_CALLBACK_URI=${{secrets.STAGING_FACEBOOK_CALLBACK_URI}} GITHUB_CALLBACK_URI=${{secrets.STAGING_GITHUB_CALLBACK_URI}} GOOGLE_CALLBACK_URI=${{secrets.STAGING_GOOGLE_CALLBACK_URI}} SEND_GRID_API_KEY=${{secrets.SEND_GRID_API_KEY}}
