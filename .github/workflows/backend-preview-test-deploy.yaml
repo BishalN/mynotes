@@ -67,6 +67,7 @@ jobs:
           resource-group: mynotes
           dns-name-label: mynotestaging
           image: ghcr.io/bishaln/mynotes_staging:latest
+          registry-login-server: ghcr.io
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           name: mynotestaging
