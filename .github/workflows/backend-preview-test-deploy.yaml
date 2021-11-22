@@ -66,7 +66,9 @@ jobs:
         with:
           resource-group: mynotes
           dns-name-label: mynotestaging
-          image: bsal/mynotes_staging
+          image: ghcr.io/bishaln/mynotes_staging:latest
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
           name: mynotestaging
           location: "Central India"
           memory: 0.5
