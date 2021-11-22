@@ -5,4 +5,4 @@ export interface ErrorResponse {
   name?: string;
 }
 
-export const sth = "hello";
+export const sth = "helloss";
