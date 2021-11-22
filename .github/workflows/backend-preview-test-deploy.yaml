@@ -62,7 +62,7 @@ jobs:
         uses: Azure/aci-deploy@v1
         with:
           resource-group: mynotes
-          dns-name-label: mynotestaging.centralindia.azurecontainer.io
+          dns-name-label: mynotestaging
           image: bsal/mynotes_staging
           name: mynotestaging
           location: "Central India"
