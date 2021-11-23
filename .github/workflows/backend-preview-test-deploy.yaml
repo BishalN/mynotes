@@ -73,7 +73,5 @@ jobs:
           name: mynotestaging
           location: "Central India"
           memory: 0.5
-          restart-policy: OnFailure
-          ports: 80 4000
+          ports: 4000
           secure-environment-variables: DATABASE_URL=${{secrets.DATABASE_URL_STAGING}} FACEBOOK_CLIENT_ID=${{secrets.FACEBOOK_CLIENT_ID}} FACEBOOK_CLIENT_SECRET=${{secrets.FACEBOOK_CLIENT_SECRET}} GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} GITHUB_CLIENT_ID=${{secrets.STAGING_GITHUB_CLIENT_ID}} GITHUB_CLIENT_SECRET=${{secrets.STAGING_GITHUB_CLIENT_SECRET}} JWT_SECRET=${{secrets.JWT_SECRET}} FACEBOOK_CALLBACK_URI=${{secrets.STAGING_FACEBOOK_CALLBACK_URI}} GITHUB_CALLBACK_URI=${{secrets.STAGING_GITHUB_CALLBACK_URI}} GOOGLE_CALLBACK_URI=${{secrets.STAGING_GOOGLE_CALLBACK_URI}} SEND_GRID_API_KEY=${{secrets.SEND_GRID_API_KEY}}
-# changes
