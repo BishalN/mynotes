@@ -19,32 +19,32 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
-    services:
-      db:
-        image: postgres:11
-        ports: ["5432:5432"]
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: mynotes_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    # services:
+    #   db:
+    #     image: postgres:11
+    #     ports: ["5432:5432"]
+    #     env:
+    #       POSTGRES_PASSWORD: postgres
+    #       POSTGRES_DB: mynotes_test
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-          cache: "yarn"
-      - name: Install yarn globally
-        run: npm i -g yarn
-      - name: Install dependencies
-        run: yarn
-      - name: Run database migration
-        run: yarn tmg
-      - name: Run tests
-        run: yarn test
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: "14"
+      #     cache: "yarn"
+      # - name: Install yarn globally
+      #   run: npm i -g yarn
+      # - name: Install dependencies
+      #   run: yarn
+      # - name: Run database migration
+      #   run: yarn tmg
+      # - name: Run tests
+      #   run: yarn test
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -63,21 +63,21 @@ jobs:
           app-name: "mynotestaging"
           publish-profile: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
           images: "ghcr.io/bishaln/mynotes_staging:latest"
-      # - name: "Login via Azure CLI"
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
-      # - name: Deploy the docker image to azure containers
-      #   uses: Azure/aci-deploy@v1
-      #   with:
-      #     resource-group: mynotestaging
-      #     dns-name-label: mynotestaging
-      #     image: ghcr.io/bishaln/mynotes_staging:latest
-      #     registry-login-server: ghcr.io
-      #     registry-username: ${{ secrets.REGISTRY_USERNAME }}
-      #     registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-      #     name: mynotestaging
-      #     location: "Central India"
-      #     memory: 0.5
-      #     ports: 4000
-      #     secure-environment-variables: DATABASE_URL=${{secrets.DATABASE_URL_STAGING}} FACEBOOK_CLIENT_ID=${{secrets.FACEBOOK_CLIENT_ID}} FACEBOOK_CLIENT_SECRET=${{secrets.FACEBOOK_CLIENT_SECRET}} GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} GITHUB_CLIENT_ID=${{secrets.STAGING_GITHUB_CLIENT_ID}} GITHUB_CLIENT_SECRET=${{secrets.STAGING_GITHUB_CLIENT_SECRET}} JWT_SECRET=${{secrets.JWT_SECRET}} FACEBOOK_CALLBACK_URI=${{secrets.STAGING_FACEBOOK_CALLBACK_URI}} GITHUB_CALLBACK_URI=${{secrets.STAGING_GITHUB_CALLBACK_URI}} GOOGLE_CALLBACK_URI=${{secrets.STAGING_GOOGLE_CALLBACK_URI}} SEND_GRID_API_KEY=${{secrets.SEND_GRID_API_KEY}}
+# - name: "Login via Azure CLI"
+#   uses: azure/login@v1
+#   with:
+#     creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
+# - name: Deploy the docker image to azure containers
+#   uses: Azure/aci-deploy@v1
+#   with:
+#     resource-group: mynotestaging
+#     dns-name-label: mynotestaging
+#     image: ghcr.io/bishaln/mynotes_staging:latest
+#     registry-login-server: ghcr.io
+#     registry-username: ${{ secrets.REGISTRY_USERNAME }}
+#     registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+#     name: mynotestaging
+#     location: "Central India"
+#     memory: 0.5
+#     ports: 4000
+#     secure-environment-variables: DATABASE_URL=${{secrets.DATABASE_URL_STAGING}} FACEBOOK_CLIENT_ID=${{secrets.FACEBOOK_CLIENT_ID}} FACEBOOK_CLIENT_SECRET=${{secrets.FACEBOOK_CLIENT_SECRET}} GOOGLE_CLIENT_ID=${{secrets.GOOGLE_CLIENT_ID}} GOOGLE_CLIENT_SECRET=${{secrets.GOOGLE_CLIENT_SECRET}} GITHUB_CLIENT_ID=${{secrets.STAGING_GITHUB_CLIENT_ID}} GITHUB_CLIENT_SECRET=${{secrets.STAGING_GITHUB_CLIENT_SECRET}} JWT_SECRET=${{secrets.JWT_SECRET}} FACEBOOK_CALLBACK_URI=${{secrets.STAGING_FACEBOOK_CALLBACK_URI}} GITHUB_CALLBACK_URI=${{secrets.STAGING_GITHUB_CALLBACK_URI}} GOOGLE_CALLBACK_URI=${{secrets.STAGING_GOOGLE_CALLBACK_URI}} SEND_GRID_API_KEY=${{secrets.SEND_GRID_API_KEY}}
