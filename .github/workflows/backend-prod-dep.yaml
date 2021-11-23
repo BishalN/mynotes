@@ -54,6 +54,6 @@ jobs:
       - name: Publish to azure web app
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "mynotestaging"
+          app-name: "mynoteprod"
           publish-profile: ${{ secrets.AZURE_CREDENTIALS_PROD }}
           images: "ghcr.io/bishaln/mynotes_prod:latest"
