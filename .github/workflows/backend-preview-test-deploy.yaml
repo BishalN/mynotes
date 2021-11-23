@@ -64,7 +64,7 @@ jobs:
       - name: Deploy the docker image to azure containers
         uses: Azure/aci-deploy@v1
         with:
-          resource-group: mynotes
+          resource-group: mynotestaging
           dns-name-label: mynotestaging
           image: ghcr.io/bishaln/mynotes_staging:latest
           registry-login-server: ghcr.io
