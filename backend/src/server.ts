@@ -63,6 +63,11 @@ app.addHook("onRequest", async (req, res) => {
     app.log.error(error);
   }
 });
+
+app.get("/ping", async (req, res) => {
+  res.send("hello ");
+});
+
 app.register(import("./modules/auth/github"));
 app.register(import("./modules/auth/google"));
 app.register(import("./modules/auth/facebook"));
