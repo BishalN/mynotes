@@ -57,10 +57,10 @@ jobs:
       #     context: ./backend
       #     push: true
       #     tags: ghcr.io/bishaln/mynotes_staging:latest
-      # - name: "Login via Azure CLI"
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS_STAGING }}
       - name: Deploy the docker image to azure containers
         uses: Azure/aci-deploy@v1
         with:
