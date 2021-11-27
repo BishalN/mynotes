@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { useMutation } from 'react-query';
-import { BASE_URL } from '../../utils/config';
+import axios from "axios";
+import { useMutation } from "react-query";
+import { BASE_URL } from "../../utils/config";
 
 export type LoginType = { email: string; password: string };
 export type LoginError = {
@@ -16,7 +16,7 @@ export default function useLogin() {
   return useMutation(
     ({ email, password }: LoginType) =>
       axios
-        .post(`/auth/local/login`, { password, email }, { baseURL: BASE_URL })
+        .post(`/login/local`, { password, email }, { baseURL: BASE_URL })
         .then((res) => res.data as SuccessLoginType),
     {
       onMutate: (values) => {
