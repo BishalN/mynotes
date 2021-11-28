@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance, FastifyError } from "fastify";
+import fastify from "fastify";
 import fastifyEnv, { fastifyEnvOpt } from "fastify-env";
 import jwt from "jsonwebtoken";
 import fastifyCors from "fastify-cors";
